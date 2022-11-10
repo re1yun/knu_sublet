@@ -1,0 +1,79 @@
+@import url(https://fonts.googleapis.com/css?family=Arimo:400,400italic,700,700italic);
+body,
+html {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: 'Arimo', sans-serif;
+}
+
+main {
+  z-index: 2;
+  position: relative;
+  height: 100%;
+  background-color: #2D3142;
+  -webkit-transition: transform .7s ease-in-out;
+  -moz-transition: transform .7s ease-in-out;
+  -ms-transition: transform .7s ease-in-out;
+  -o-transition: transform .7s ease-in-out;
+  transition: transform .7s ease-in-out;
+}
+
+.ua {
+  z-index: 3;
+  
+  position: absolute;
+  top: 20px;
+  left: 30px;
+}
+
+.fa-house {
+  color:#EF8354;
+  font-size: 2.4em;
+}
+
+@media (min-width: 480px) {
+  .nav-list {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav-right {
+    position: absolute;
+  }
+  .hidden-xs {
+    display: block;
+  }
+  .visible-xs {
+    display: none;
+  }
+}
+
+.post-page, .user-page {
+  width: auto;
+  padding: 10% 0 0;
+  margin: auto;
+}
+
+.post-list {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 900px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.user-box {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 900px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}

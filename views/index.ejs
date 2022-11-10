@@ -1,0 +1,23 @@
+<!-- views/index.ejs -->
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <base href="http://127.0.0.1:3000/">
+    <%-include('partials/header.ejs') %>
+  </head>
+  <body>
+    <%-include('partials/nav.ejs') %> 
+    <main>
+      <nav>
+        <div class="nav-right hidden-xs">
+          <div class="button" id="btn">
+            <div class="bar top"></div>
+            <div class="bar middle"></div>
+            <div class="bar bottom"></div>
+            </div>
+        </div>
+      </nav>
+      <%-include(title + '.ejs') %>
+    </main>
+  </body>
+</html>
