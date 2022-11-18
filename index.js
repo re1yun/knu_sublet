@@ -1,9 +1,12 @@
+//index.js
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var passport = require("passport");
+var flash = require('connect-flash');
+var passport = require("./config/passport");
 var expressSession = require('express-session');
 var fs = require('fs');
 
@@ -15,7 +18,7 @@ app.engine("html", require("ejs").renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
-
+app.use(flash());
 app.use(
   expressSession({
     secret: "my key",
@@ -27,11 +30,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate('session'));
 
+//모든 request에 대해서 로그인 상태 확인 및 현재 유저 저장
+app.use(function(req,res,next){
+  res.locals.isAuthenticated = req.isAuthenticated();
+  res.locals.currentUser = req.user;
+  next();
+});
+
+//routes
 app.use("/", require('./routes/home')(app));
-app.use("/sign_in", require('./routes/sign_in')(app));
-// app.use("/sign_up", require('./routes/sign_up')(app));
-// app.use("/logout", require('./routes/logout')(app));
-// app.use("/write", require('./routes/write')(app));
 app.use("/post", require('./routes/post')(app));
 app.use("/user", require('./routes/user')(app));
 

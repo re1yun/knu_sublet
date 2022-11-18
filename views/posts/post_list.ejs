@@ -8,6 +8,7 @@
                     <th scope = "col">번호</th>
                     <th scope = "col">제목</th>
                     <th scope = "col">위치</th>
+                    <th scope = "col">작성자</th>
                     <th scope = "col">작성일</th>
                     <th scope = "col">조회</th>
                 </tr>
@@ -18,19 +19,31 @@
                 <tr>
                     <td colspan=2> There is no data to show :( </td>
                 </tr>
-                <% } %>
+                <% } else { %>
                 <% posts.forEach(function(post) { %>
                 <tr>
                     <td><%= post._id %></td>
-                    <td>
-                    <a href="/post/<%= post._id %>"><div class="ellipsis"><%= post.title %></div></a>
-                    </td>
-                    <td><%=post.location%></td>
+                    <td><a href="/post/<%= post._id %>"><%= post.title %></a></td>
+                    <td><%= post.location %></td>
+                    <td><%= post.author ? post.author.userID : "" %></td>
                     <td><%= post.createdAt %></td>
                     <td>no data</td>
                 </tr>
-                <% }) %>
+                <% })} %>
             </tbody>
         </table>
     </div>
 </div>
+<nav data-pagination>
+    <%
+        var previousBtnEnabled = currentPage>1;
+        var nextBtnEnabled = currentPage<maxPage;
+    %>
+    <a href=# disabled><i class="fa-solid fa-chevron-left"></i></a>
+    <ul>
+        <% for(i = 1; i <= maxPage; i++) { %>
+            <li class="<%= currentPage == i?'current':'' %>"><a href="/?page=<%= i %>&limit=<%= limit %>"><%= i %></a></li> <!--현재 페이지일시 class current 적용-->
+        <% } %>
+    </ul>
+    <a href=#2 disabled><i class="fa-solid fa-chevron-right"></i></a>
+</nav>

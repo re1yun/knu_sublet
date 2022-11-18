@@ -1,0 +1,44 @@
+<!-- views/posts/post_edit.ejs -->
+
+<div class="post-page">
+    <div class="form">
+        <form action="/post/<%= post._id %>/edit" id="post_write_form" method="post">
+            <div>
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" placeholder="제목을 입력하세요" value="<%= post.title %>">
+                <% if(errors.title){ %>
+                    <span><%= errors.title.message %></span>
+                <% } %>
+            </div>
+            
+            <div>
+                <label for="body">본문</label>
+                <textarea id="body" name="body" rows="5"><%= post.body %></textarea>
+                <% if(errors.body){ %>
+                    <span><%= errors.body.message %></span>
+                <% } %>
+            </div>
+    
+            <div>
+                <label for="location">위치</label>
+                <select name = "location" form = "post_write_form">
+                    <option <% if(post.location === '북문') {%> selected <% } %>>북문</option>   
+                    <option <% if(post.location === '정문') {%> selected <% } %>>정문</option>
+                    <option <% if(post.location === '쪽문') {%> selected <% } %>>쪽문</option>
+                    <option <% if(post.location === '서문') {%> selected <% } %>>서문</option>
+                </select>
+            </div>
+    
+            <div>
+                <label>written by <%= post.author.userID %></label>
+                <input type="hidden" name="writtenBy" value = "<%= post.author.userID %>">
+            </div>
+    
+            <div>
+                <ahref="/">뒤로 가기</a>
+                <button type="submit">제출</button>
+            </div>
+    
+        </form>
+    </div>
+</div>

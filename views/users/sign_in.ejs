@@ -2,9 +2,15 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form">
-            <input type="text" placeholder="username"/>
-            <input type="password" placeholder="password"/>
+        <form class="login-form" method="post" action="user/sign_in">
+            <input type="text" name="userID" placeholder="userID" value="<%= user.id %>"/>
+            <% if(errors.userID){ %>
+                <span><%= errors.userID.message %></span>
+            <% } %>
+            <input type="password" name="password" placeholder="password"/>
+            <% if(errors.password){ %>
+                <span><%= errors.password.message %></span>
+            <% } %>
             <button>login</button>
             <p class="message">Not registered? <a href="user/sign_up">Create an account</a></p>
         </form>

@@ -7,6 +7,7 @@
             <div>
                 <div>위치: <%= post.location %></div>
                 <div>본문: <%= post.body %></div>
+                <div>작성자: <%= post.author.userID %></div>
             </div>
     
             <div>
@@ -21,9 +22,11 @@
             <div>
                 <div>
                     <a href = '/'>뒤로가기</a>
-                    <% //if(currentUser === post.writtenBy) { %> 
-                        <a href = '/post/<%= post._id %>/edit'>편집하기</a>
-                    <% //} %> 
+                    <% if(currentUser) { %>
+                        <% if(currentUser.userID === post.writtenBy) { %> 
+                            <a href = '/post/<%= post._id %>/edit'>편집하기</a>
+                        <% } %> 
+                    <% } %>
                 </div>
             </div>
         </div>
