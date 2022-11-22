@@ -20,7 +20,7 @@
     <% if(currentUser) { %>
     <li class="sidebar-item"><a href="user/<%= currentUser.userID %>" class="sidebar-anchor">내 정보</a></li>
     <li class="sidebar-item"><a href="user/sign_out" class="sidebar-anchor">로그아웃</a></li>
-    <li class="sidebar-item"><a href="post/new" class="sidebar-anchor">글쓰기</a></li>
+    <li class="sidebar-item"><a href="post/new/<%= getPostQueryString() %>" class="sidebar-anchor">글쓰기</a></li>
     <% } %>
   </ul>
 </div>

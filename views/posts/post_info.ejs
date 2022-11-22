@@ -21,10 +21,10 @@
     
             <div>
                 <div>
-                    <a href = '/'>뒤로가기</a>
+                    <a href = '/<%= getPostQueryString() %>'>뒤로가기</a>
                     <% if(currentUser) { %>
-                        <% if(currentUser.userID === post.writtenBy) { %> 
-                            <a href = '/post/<%= post._id %>/edit'>편집하기</a>
+                        <% if(currentUser.userID == post.author.userID) { %> 
+                            <a href = '/post/<%= post._id %>/edit<%= getPostQueryString() %>'>편집하기</a>
                         <% } %> 
                     <% } %>
                 </div>

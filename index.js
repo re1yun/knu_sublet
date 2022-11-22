@@ -8,7 +8,7 @@ var methodOverride = require('method-override');
 var flash = require('connect-flash');
 var passport = require("./config/passport");
 var expressSession = require('express-session');
-var fs = require('fs');
+var util = require('./util');
 
 //express setting
 //app.set("views", "./views");
@@ -38,8 +38,8 @@ app.use(function(req,res,next){
 });
 
 //routes
-app.use("/", require('./routes/home')(app));
-app.use("/post", require('./routes/post')(app));
+app.use("/", util.getPostQueryString, require('./routes/home')(app));
+app.use("/post", util.getPostQueryString, require('./routes/post')(app));
 app.use("/user", require('./routes/user')(app));
 
 

@@ -11,6 +11,10 @@
             <% if(errors.password){ %>
                 <span><%= errors.password.message %></span>
             <% } %>
+
+            <% if(errors.login){ %>
+                <span><%= errors.login %></span>
+            <% } %>
             <button>login</button>
             <p class="message">Not registered? <a href="user/sign_up">Create an account</a></p>
         </form>

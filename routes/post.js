@@ -25,9 +25,9 @@ module.exports = function(app){
                     console.log("post creation failed on post");
                     req.flash('post', req.body);
                     req.flash('errors', util.parseError(err));
-                    return res.redirect('/post/new')
+                    return res.redirect('/post/new' + res.locals.getPostQueryString());
                 }
-                res.redirect('/post/' + post._id);
+                res.redirect('/post/' + post._id + res.locals.getPostQueryString());
             });
         })
     ;
@@ -38,7 +38,7 @@ module.exports = function(app){
             var errors = req.flash('errors')[0] || {};
             console.log("recieved post edit get request");
             if(!post){
-                console.log('no post found');
+                //console.log('no post found');
                 Post.findOne({_id: req.params.id}, function(err, post){
                     if(err){
                         return res.return(err);
@@ -66,9 +66,9 @@ module.exports = function(app){
                 if(err){
                     req.flash('post', req.body);
                     req.flash('errors', util.parseError(err));
-                    return res.redirect('/post/' + req.params.id + 'edit');
+                    return res.redirect('/post/' + req.params.id + 'edit' + res.locals.getPostQueryString());
                 }
-                res.redirect('/post/' + req.params.id);
+                res.redirect('/post/' + req.params.id + res.locals.getPostQueryString());
             })
         })
     ;
@@ -91,6 +91,7 @@ module.exports = function(app){
 }
 
 function checkPermission(req, res, next){
+    var Post = require('../models/post');
     Post.findOne({_id:req.params.id}, function(err, post){
         if(err) return res.json(err);
         if(post.author != req.user.id) return util.noPermission(req, res);

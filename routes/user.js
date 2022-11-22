@@ -16,6 +16,7 @@ module.exports = function(app){
         .get(function(req, res){
             var user = req.flash('user')[0] || {};
             var errors = req.flash('errors')[0] || {};
+            console.log(req.flash);
             res.render('index', {
                 title: 'users/sign_in',
                 user: user,
@@ -48,7 +49,8 @@ module.exports = function(app){
         },
             passport.authenticate('local-login', {
                 successRedirect : '/',
-                failureRedirect : '/user/sign_in'
+                failureRedirect : '/user/sign_in',
+                failureFlash: true
             })
         )
     ;

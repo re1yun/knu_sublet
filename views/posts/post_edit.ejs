@@ -2,7 +2,7 @@
 
 <div class="post-page">
     <div class="form">
-        <form action="/post/<%= post._id %>/edit" id="post_write_form" method="post">
+        <form action="/post/<%= post._id %>/edit?_method=put<%= getPostQueryString(true) %>" id="post_write_form" method="post">
             <div>
                 <label for="title">제목</label>
                 <input type="text" id="title" name="title" placeholder="제목을 입력하세요" value="<%= post.title %>">
@@ -35,7 +35,7 @@
             </div>
     
             <div>
-                <ahref="/">뒤로 가기</a>
+                <a href="/post/<%= post._id %><%= getPostQueryString() %>">뒤로 가기</a>
                 <button type="submit">제출</button>
             </div>
     

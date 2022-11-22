@@ -23,7 +23,7 @@
                 <% posts.forEach(function(post) { %>
                 <tr>
                     <td><%= post._id %></td>
-                    <td><a href="/post/<%= post._id %>"><%= post.title %></a></td>
+                    <td><a href="/post/<%= post._id %><%= getPostQueryString() %>"><%= post.title %></a></td>
                     <td><%= post.location %></td>
                     <td><%= post.author ? post.author.userID : "" %></td>
                     <td><%= post.createdAt %></td>
@@ -39,11 +39,15 @@
         var previousBtnEnabled = currentPage>1;
         var nextBtnEnabled = currentPage<maxPage;
     %>
-    <a href=# disabled><i class="fa-solid fa-chevron-left"></i></a>
     <ul>
+        <li>
+            <a href="/<%= getPostQueryString(false, {page: currentPage - 1}) %>" <%= previousBtnEnabled?'':'disabled' %>><i class="fa-solid fa-chevron-left"></i></a>
+        </li>
         <% for(i = 1; i <= maxPage; i++) { %>
-            <li class="<%= currentPage == i?'current':'' %>"><a href="/?page=<%= i %>&limit=<%= limit %>"><%= i %></a></li> <!--현재 페이지일시 class current 적용-->
+            <li class="<%= currentPage == i?'current':'' %>"><a href="/<%= getPostQueryString(false, {page: i}) %>"><%= i %></a></li> <!--현재 페이지일시 class current 적용-->
         <% } %>
+        <li>
+            <a href="/<%= getPostQueryString(false, {page: currentPage + 1}) %>" <%= nextBtnEnabled?'':'disabled' %>><i class="fa-solid fa-chevron-right"></i></a>
+        </li>
     </ul>
-    <a href=#2 disabled><i class="fa-solid fa-chevron-right"></i></a>
 </nav>
