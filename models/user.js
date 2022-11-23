@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
   userID: {
     type:String, 
-    required:[true,'Username is required!'], 
+    required:[true,'UserID is required!'], 
     match:[/^.{4,12}$/,'Should be 4-12 characters!'],
     trim:true,
     unique:true
