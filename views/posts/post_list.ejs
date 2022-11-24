@@ -5,16 +5,16 @@
         <table class = "list">
             <thead>
                 <tr>
-                    <th scope = "col">번호</th>
-                    <th scope = "col">제목</th>
-                    <th scope = "col">위치</th>
-                    <th scope = "col">작성자</th>
-                    <th scope = "col">작성일</th>
-                    <th scope = "col">조회</th>
+                    <th class="n1" scope = "col">번호</th>
+                    <th class="n3" scope = "col">제목</th>
+                    <th class="n1" scope = "col">위치</th>
+                    <th class="n2" scope = "col">작성자</th>
+                    <th class="n2" scope = "col">작성일</th>
+                    <th class="n1" scope = "col">조회</th>
                 </tr>
             </thead>
     
-            <tbody>
+            <tbody style="text-align:center;">
                 <% if(posts == null || posts.length == 0){ %>
                 <tr>
                     <td colspan=2> There is no data to show :( </td>
@@ -22,12 +22,14 @@
                 <% } else { %>
                 <% posts.forEach(function(post) { %>
                 <tr>
-                    <td><%= post._id %></td>
+                    <td><%= post.index %></td>
                     <td><a href="/post/<%= post._id %><%= getPostQueryString() %>"><%= post.title %></a></td>
                     <td><%= post.location %></td>
                     <td><%= post.author ? post.author.userID : "" %></td>
-                    <td><%= post.createdAt %></td>
-                    <td>no data</td>
+                    <td>
+                        <span data-date="<%= post.createdAt %>"></span>    
+                    </td>
+                    <td><%= post.views %></td>
                 </tr>
                 <% })} %>
             </tbody>

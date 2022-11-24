@@ -79,6 +79,8 @@ module.exports = function(app){
                 .populate('author')
                 .exec(function(err, post){
                     if(err) console.log(err);
+                    post.views++;
+                    post.save();
                     res.render('index', {
                         title: 'posts/post_info',
                         post: post

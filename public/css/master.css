@@ -64,6 +64,7 @@ main {
   margin: 0 auto 100px;
   padding: 45px;
   text-align: center;
+  text-overflow: ellipsis;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
@@ -76,4 +77,16 @@ main {
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.n1 {
+  width: 100px;
+}
+
+.n2 {
+  width: 200px;
+}
+
+.n3 {
+  width: 300px;
 }
