@@ -5,6 +5,8 @@ module.exports = function(app){
     var router = express.Router();
     var Post = require('../models/post');
     var util = require('../util');
+    const multer = require('multer');
+    const upload = multer({ dest: 'uploads/' });
 
     router.route('/new')
         .get(util.isLoggedin, function(req, res){
@@ -29,6 +31,23 @@ module.exports = function(app){
                 }
                 res.redirect('/post/' + post._id + res.locals.getPostQueryString());
             });
+        })
+    ;
+
+
+    router.route('/upload')
+        .get(function(req, res){
+            res.render('index', {
+                title: 'posts/post_upload_image_test'
+            })
+        })
+        .post(upload.single('image'), function(req, res){
+            if (req.file) {
+                console.log('File uploaded successfully.');
+            } else {
+                console.log('Error uploading file:', req.file.error);
+            }
+            res.redirect('/');
         })
     ;
     
@@ -86,7 +105,7 @@ module.exports = function(app){
                         post: post
                     })
                 })
-            })
+        })
     ;
 
     return router;

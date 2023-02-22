@@ -10,6 +10,7 @@ var passport = require("./config/passport");
 var expressSession = require('express-session');
 var util = require('./util');
 
+
 //express setting
 //app.set("views", "./views");
 app.set("view engine", "ejs");
