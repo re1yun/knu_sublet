@@ -2,10 +2,12 @@
 
 <div class="post-page">
     <div class="form">
+        <img id="image" src="" alt="이미지를 업로드해주세요." width="76px" height="76px" />
+        <img id="image2" src="" alt="이미지를 업로드해주세요." width="76px" height="76px" />
         <form action="/post/upload" method="post" enctype="multipart/form-data">
             <div>
                 <label for="title">이미지 업로드 테스트</label>
-                <input type="file" name="image">
+                <input type="file" id="file" name="image" multiple>
             </div>
             
             <div>
@@ -16,3 +18,4 @@
         </form>
     </div>
 </div>
+<script src = "js/fileupload.js"></script>

@@ -5,8 +5,22 @@ module.exports = function(app){
     var router = express.Router();
     var Post = require('../models/post');
     var util = require('../util');
+    const path = require('path');
     const multer = require('multer');
-    const upload = multer({ dest: 'uploads/' });
+    const stroage = multer.diskStorage({
+        destination: function(req, file, cb){
+            cb(null, 'uploads/');
+        },
+        filename: function(req, file, cb){
+            const ext = path.extname(file.originalname);
+            const basename = path.basename(file.originalname, ext);
+            cb(null, basename + new Date().valueOf() + ext);
+        }
+    });
+
+    const upload = multer({ 
+        storage: stroage
+    });
 
     router.route('/new')
         .get(util.isLoggedin, function(req, res){
@@ -41,11 +55,11 @@ module.exports = function(app){
                 title: 'posts/post_upload_image_test'
             })
         })
-        .post(upload.single('image'), function(req, res){
-            if (req.file) {
+        .post(upload.array('image'), function(req, res){
+            if (req.files) {
                 console.log('File uploaded successfully.');
             } else {
-                console.log('Error uploading file:', req.file.error);
+                console.log('Error uploading file:', req.files.error);
             }
             res.redirect('/');
         })
