@@ -2,7 +2,7 @@
 
 <div class="post-page">
     <div class="form">
-        <form action="/post/new" id="post_write_form" method="post">
+        <form action="/post/new" id="post_write_form" enctype="multipart/form-data" method="post">
             <div>
                 <label for="title">제목</label>
                 <input type="text" id="title" name="title" placeholder="제목을 입력하세요" value="<%= post.title %>">
@@ -17,6 +17,13 @@
                 <% if(errors.body){ %>
                     <span><%= errors.body.message %></span>
                 <% } %>
+            </div>
+
+            <div id = "imageSection">
+                <label for="image">사진 업로드</label>
+                <input type="file" id="file" name="image" multiple>
+                <div id = "imageContainer">
+                </div>
             </div>
     
             <div>
@@ -42,3 +49,4 @@
         </form>
     </div>
 </div>
+<script src = "js/fileupload.js"></script>

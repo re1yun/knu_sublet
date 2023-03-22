@@ -3,29 +3,34 @@
 const file = document.querySelector("#file");
 file.addEventListener("change", (e) => {
     console.log("file change event");
+    document.querySelector("#imageContainer").replaceChildren();
     const files = e.target.files;
-    const imageurl = URL.createObjectURL(files[0]);
-    const imageurl2 = URL.createObjectURL(files[1]);
-    const image = document.querySelector("#image");
-    const image2 = document.querySelector("#image2");
-    image.src = imageurl;
-    image2.src = imageurl2;
+    // imageUrls: array of image urls
+    var imageUrls = [];
+    for(let i = 0; i < files.length; i++){
+        imageUrls.push(URL.createObjectURL(files[i]));
+    }
+    //var imageElements = [];
+    for(let i = 0; i < files.length; i++){
+        string = "<img id='image" + i + "' src='" + imageUrls[i] + "' alt='image" + i + "' width='76px' height='76px'/>";
+        document.querySelector("#imageContainer").innerHTML += string;
+    }
 
     const formData = new FormData();
-    // write me a for loop adding all file to formData
+    // formData: form data to be sent to the server
     for(let i = 0; i < files.length; i++){
         formData.append('image', files[i]);
     }
     
-    fetch("/post/upload", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-    }
-    );
+    // fetch("/post/upload", {
+    //     method: "POST",
+    //     body: formData
+    // })
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         console.log("after fetch" + data);
+    //     }
+    //     );
 });
 
 // function uploadImage(file, callback){

@@ -32,7 +32,7 @@ module.exports = function(app){
                 errors: errors
             })
         })
-        .post(util.isLoggedin, function(req, res){
+        .post(util.isLoggedin, upload.array('image'), function(req, res){
             req.body.author = req.user._id;
             Post.create(req.body, function(err, post){
                 console.log(req.body);
