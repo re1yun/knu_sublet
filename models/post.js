@@ -11,7 +11,7 @@ var postSchema = new Schema({
     author:{type:mongoose.Schema.Types.ObjectId, ref: 'user', required:true}, //작성한 사람
     views:{type:Number, default:0},         //조회수
     index:{type:Number},                    //인덱스
-    attachment:{type:mongoose.Schema.Types.ObjectId, ref:'file'},       //파일
+    attachment:[{type:mongoose.Schema.Types.ObjectId, ref:'file'}],       //파일id들
     createdAt:{type:Date, default:Date.now},//작성한 시각
     updatedAt:{type:Date}                   //수정한 시각
 });

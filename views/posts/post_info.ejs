@@ -8,6 +8,12 @@
                 <div>위치: <%= post.location %></div>
                 <div>본문: <%= post.body %></div>
                 <div>작성자: <%= post.author.userID %></div>
+                <div>사진: 
+                    <% if(post.attachment) { %>
+                        <% for(let i = 0; i < post.attachment.length; i++) { %>
+                            <img src = "/uploads/<%= post.attachment[i].serverFileName %>" alt = "사진이 없습니다." width="76px" height="76px" />
+                    <% } } %>
+                </div>
             </div>
     
             <div>

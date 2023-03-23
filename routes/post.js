@@ -4,12 +4,13 @@ module.exports = function(app){
     var express  = require('express');
     var router = express.Router();
     var Post = require('../models/post');
+    var File = require('../models/file');
     var util = require('../util');
     const path = require('path');
     const multer = require('multer');
     const stroage = multer.diskStorage({
         destination: function(req, file, cb){
-            cb(null, 'uploads/');
+            cb(null, 'public/uploads/');
         },
         filename: function(req, file, cb){
             const ext = path.extname(file.originalname);
@@ -32,19 +33,31 @@ module.exports = function(app){
                 errors: errors
             })
         })
-        .post(util.isLoggedin, upload.array('image'), function(req, res){
+        .post(util.isLoggedin, upload.array('image'), async function(req, res){
             req.body.author = req.user._id;
-            Post.create(req.body, function(err, post){
-                console.log(req.body);
-                console.log(err);
-                if(err) {
-                    console.log("post creation failed on post");
-                    req.flash('post', req.body);
-                    req.flash('errors', util.parseError(err));
-                    return res.redirect('/post/new' + res.locals.getPostQueryString());
+            req.body.attachment = []
+
+            try {
+                const post = await Post.create(req.body);
+        
+                // iterate through files and create new file instance
+                for (var i = 0; i < req.files.length; i++) {
+                    var file = req.files[i];
+                    var newFilePromise = File.createNewInstance(file, req.user._id, post._id);
+                    var newFileId = await newFilePromise;
+                    post.attachment.push(newFileId);
                 }
+        
+                await post.save();
+        
                 res.redirect('/post/' + post._id + res.locals.getPostQueryString());
-            });
+            } catch(err) {
+                console.log("post creation failed on post");
+                req.flash('post', req.body);
+                req.flash('errors', util.parseError(err));
+                return res.redirect('/post/new' + res.locals.getPostQueryString());
+            }
+
         })
     ;
 
@@ -110,6 +123,7 @@ module.exports = function(app){
         .get(function(req, res){
             Post.findOne({_id:req.params.id})
                 .populate('author')
+                .populate('attachment')
                 .exec(function(err, post){
                     if(err) console.log(err);
                     post.views++;
