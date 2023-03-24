@@ -10,10 +10,10 @@ file.addEventListener("change", (e) => {
     for(let i = 0; i < files.length; i++){
         imageUrls.push(URL.createObjectURL(files[i]));
     }
-    //var imageElements = [];
+    
     for(let i = 0; i < files.length; i++){
         string = "<img id='image" + i + "' src='" + imageUrls[i] + "' alt='image" + i + "' width='76px' height='76px'/>";
-        document.querySelector("#imageContainer").innerHTML += string;
+        document.querySelector("#imageContainer").insertAdjacentHTML('beforeend', string);
     }
 
     const formData = new FormData();

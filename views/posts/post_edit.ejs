@@ -2,7 +2,7 @@
 
 <div class="post-page">
     <div class="form">
-        <form action="/post/<%= post._id %>/edit?_method=put<%= getPostQueryString(true) %>" id="post_write_form" method="post">
+        <form action="/post/<%= post._id %>/edit?_method=put<%= getPostQueryString(true) %>" id="post_write_form" enctype="multipart/form-data" method="post">
             <div>
                 <label for="title">제목</label>
                 <input type="text" id="title" name="title" placeholder="제목을 입력하세요" value="<%= post.title %>">
@@ -19,6 +19,17 @@
                 <% } %>
             </div>
     
+            <div id = "imageSection">
+                <label for="image">사진 추가 업로드</label>
+                <input type="file" id="file" name="image" multiple>
+                <div id = "imageContainer">
+                    <% if(post.attachment) { %>
+                        <% for(let i = 0; i < post.attachment.length; i++) { %>
+                            <img src = "/uploads/<%= post.attachment[i].serverFileName %>" alt = "사진이 없습니다." width="100px" height="100px" />
+                    <% } } %>
+                </div>
+            </div>
+
             <div>
                 <label for="location">위치</label>
                 <select name = "location" form = "post_write_form">
@@ -42,3 +53,4 @@
         </form>
     </div>
 </div>
+<script src = "js/fileupload.js"></script>

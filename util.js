@@ -49,6 +49,8 @@ util.getPostQueryString = function(req, res, next){
     if(searchType) queryArray.push('searchType='+searchType);
     if(searchText) queryArray.push('searchText='+searchText);
 
+    // if there is at least one query added to array, create queryString. if it is being appended to existing query, add '&' in front, else start new string with '?'
+    // plus, join() function adds all elements of array into one string with '&' in between
     if(queryArray.length>0) queryString = (isAppended?'&':'?') + queryArray.join('&');
 
     return queryString;

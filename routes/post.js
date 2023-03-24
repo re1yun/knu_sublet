@@ -35,7 +35,6 @@ module.exports = function(app){
         })
         .post(util.isLoggedin, upload.array('image'), async function(req, res){
             req.body.author = req.user._id;
-            req.body.attachment = []
 
             try {
                 const post = await Post.create(req.body);
@@ -52,6 +51,7 @@ module.exports = function(app){
         
                 res.redirect('/post/' + post._id + res.locals.getPostQueryString());
             } catch(err) {
+                // if post creation fails, return to new post page with error message
                 console.log("post creation failed on post");
                 req.flash('post', req.body);
                 req.flash('errors', util.parseError(err));
@@ -61,7 +61,7 @@ module.exports = function(app){
         })
     ;
 
-
+    // image upload test route
     router.route('/upload')
         .get(function(req, res){
             res.render('index', {
@@ -80,20 +80,23 @@ module.exports = function(app){
     
     router.route('/:id/edit')
         .get(util.isLoggedin, checkPermission, function(req, res){
+            // post: incase if editing fails, we want to keep the data
             var post = req.flash('post')[0];
             var errors = req.flash('errors')[0] || {};
             console.log("recieved post edit get request");
             if(!post){
                 //console.log('no post found');
-                Post.findOne({_id: req.params.id}, function(err, post){
-                    if(err){
-                        return res.return(err);
-                    }
-                    res.render('index', {
-                        title: 'posts/post_edit',
-                        post: post,
-                        errors: errors
-                    })
+                Post.findOne({_id: req.params.id})
+                    .populate('attachment')
+                    .exec(function(err, post){
+                        if(err){
+                            return res.return(err);
+                        }
+                        res.render('index', {
+                            title: 'posts/post_edit',
+                            post: post,
+                            errors: errors
+                        })
                 })
             }
             else{
@@ -106,16 +109,36 @@ module.exports = function(app){
             }
         })
 
-        .put(util.isLoggedin, checkPermission, function(req, res){
+        .put(util.isLoggedin, checkPermission, upload.array('image'), async function(req, res){
             req.body.updatedAt = Date.now();
-            Post.findOneAndUpdate({_id: req.params.id}, req.body, {runValidators: true}, function(err, post){
+            
+            // find post first
+            const post = await Post.findOne({_id: req.params.id});
+            if(req.body.files){
+                // iterate through files and create new file instance
+                for (var i = 0; i < req.files.length; i++) {
+                    var file = req.files[i];
+                    var newFilePromise = File.createNewInstance(file, req.user._id, req.params._id);
+                    var newFileId = await newFilePromise;
+                    post.attachment.push(newFileId);
+                }
+            }
+            // save post
+            await post.save();
+            
+            // else post save success, redirect to post info page
+            res.redirect('/post/' + req.params.id + res.locals.getPostQueryString());
+
+            /* Post.findOneAndUpdate({_id: req.params.id}, req.body, {runValidators: true}, async function(err, post){
+                // if post save fail, return back to edit page
                 if(err){
                     req.flash('post', req.body);
                     req.flash('errors', util.parseError(err));
                     return res.redirect('/post/' + req.params.id + 'edit' + res.locals.getPostQueryString());
                 }
+                // else post save success, redirect to post info page
                 res.redirect('/post/' + req.params.id + res.locals.getPostQueryString());
-            })
+            }) */
         })
     ;
 
@@ -143,6 +166,7 @@ function checkPermission(req, res, next){
     var Post = require('../models/post');
     Post.findOne({_id:req.params.id}, function(err, post){
         if(err) return res.json(err);
+        // if no permission, perform noPermission in util.js
         if(post.author != req.user.id) return util.noPermission(req, res);
     
         next();
