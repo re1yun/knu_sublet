@@ -2,7 +2,7 @@
 
 <div class="login-page">
     <div class="form">
-        <form action="/user/sign_up" method="post" class="register-form">
+        <form action="/user/sign_up" method="post" class="login-form">
             <input type="text" name="userID" placeholder="userID" value="<%= user.userID %>"/>
             <% if(errors.userID){ %>
                 <span><%= errors.userID.message %></span>
@@ -24,7 +24,7 @@
                 <span><%= errors.passwordConfirmation.message %></span>
             <% } %>
             <button>create</button>
-            <p class="message">Already registered? <a href="sign_in">Sign In</a></p>
+            <p class="message">Already registered? <a href="user/sign_in">Sign In</a></p>
         </form>
     </div>
 </div>

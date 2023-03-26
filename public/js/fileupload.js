@@ -12,7 +12,7 @@ file.addEventListener("change", (e) => {
     }
     
     for(let i = 0; i < files.length; i++){
-        string = "<img id='image" + i + "' src='" + imageUrls[i] + "' alt='image" + i + "' width='76px' height='76px'/>";
+        string = "<img id='image" + i + "' src='" + imageUrls[i] + "' alt='image" + i + "' />";
         document.querySelector("#imageContainer").insertAdjacentHTML('beforeend', string);
     }
 

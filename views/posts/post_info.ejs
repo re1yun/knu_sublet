@@ -1,40 +1,76 @@
 <!-- views/posts/post_show.ejs -->
 
 <div class="post-page">
-    <div class="post-list">
-        <h3>제목: <%= post.title %></h3>
-        <div>
-            <div>
-                <div>사진:<br> 
-                    <% if(post.attachment) { %>
-                        <% for(let i = 0; i < post.attachment.length; i++) { %>
-                            <img src = "/uploads/<%= post.attachment[i].serverFileName %>" alt = "사진이 없습니다." width="100px" height="100px" />
-                    <% } } %>
-                </div>
-                <div>위치: <%= post.location %></div>
-                <div>본문: <%= post.body %></div>
-                <div>작성자: <%= post.author.userID %></div>
+    <div class="post-info-page">
+        <h1 class="post-title"><%= post.title %></h1>
+        <div class="post-details">
+            <div class="post-info">
+            <i class="fas fa-map-marker-alt"></i>
+            <span class="post-location"><%= post.location %></span>
+            <i class="fas fa-user"></i>
+            <span class="post-author"><%= post.author.userID %></span>
             </div>
-    
-            <div>
-                <div> 
-                    <div><span>작성일: <%= post.createdAt %>"></span></div>
-                    <% if(post.updatedAt) { %>
-                        <div><span>수정일: <%= post.updatedAt %>"></span></div>
-                    <% } %>
-                </div>
+            <div class="post-meta">
+                <span class="post-date">
+                    <i class="far fa-clock"></i>
+                    <span data-date="<%= post.createdAt %>"></span>
+                </span>
+                <% if(post.updatedAt) { %>
+                    <span class="post-update">
+                    <i class="fas fa-history"></i>
+                    <span data-date="<%= post.updatedAt %>"></span>
+                    </span>
+                <% } %>
             </div>
-    
-            <div>
-                <div>
-                    <a href = '/<%= getPostQueryString() %>'>뒤로가기</a>
-                    <% if(currentUser) { %>
-                        <% if(currentUser.userID == post.author.userID) { %> 
-                            <a href = '/post/<%= post._id %>/edit<%= getPostQueryString() %>'>편집하기</a>
-                        <% } %> 
-                    <% } %>
+        </div>
+        <div class="post-photo">
+            <% if(post.attachment && post.attachment.length > 0 && post.attachment[0].isDeleted == false) { %>
+            <div class="image-container current">
+                <img src="/uploads/<%= post.attachment[0].serverFileName %>" alt="사진이 없습니다." />
+            </div>
+            <% if(post.attachment.length > 1) { %>
+                <div class="image-navigation">
+                    <button class="prev-button">Prev</button>
+                    <button class="next-button">Next</button>
                 </div>
+            <% } %>
+            <% } else { %>
+                <p>There are no photos for this post.</p>
+            <% } %>
+        </div>
+      
+        <div class="post-body">
+            <div class="post-content">
+                <p><%= post.body %></p>
+            </div>
+            <div class="post-actions">
+            <a href="/<%= getPostQueryString() %>">뒤로가기</a>
+            <% if(currentUser && currentUser.userID == post.author.userID) { %>
+                <a href="/post/<%= post._id %>/edit<%= getPostQueryString() %>">편집하기</a>
+            <% } %>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    const prevButton = document.querySelector('.prev-button');
+    const nextButton = document.querySelector('.next-button');
+    const currentImage = document.querySelector('.image-container.current');
+
+    prevButton.addEventListener('click', () => {
+        const prevImage = currentImage.previousElementSibling;
+        if (prevImage) {
+        currentImage.classList.remove('current');
+        prevImage.classList.add('current');
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        const nextImage = currentImage.nextElementSibling;
+        if (nextImage) {
+        currentImage.classList.remove('current');
+        nextImage.classList.add('current');
+        }
+    });
+</script>

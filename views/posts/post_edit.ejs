@@ -1,56 +1,69 @@
 <!-- views/posts/post_edit.ejs -->
 
 <div class="post-page">
-    <div class="form">
-        <form action="/post/<%= post._id %>/edit?_method=put<%= getPostQueryString(true) %>" id="post_write_form" enctype="multipart/form-data" method="post">
-            <div>
-                <label for="title">제목</label>
-                <input type="text" id="title" name="title" placeholder="제목을 입력하세요" value="<%= post.title %>">
+    <form action="/post/<%= post._id %>/edit?_method=put<%= getPostQueryString(true) %>" id="post_write_form" enctype="multipart/form-data" method="post">
+        <div class="post-edit-page">
+            <h3 class="form-title">게시물 수정</h3>
+            <div class="form-input">
+                <label class="form-label" for="title">제목</label>
+                <input class="form-field" type="text" id="title" name="title" placeholder="제목을 입력하세요" value="<%= post.title %>">
                 <% if(errors.title){ %>
-                    <span><%= errors.title.message %></span>
+                    <span class="form-error"><%= errors.title.message %></span>
                 <% } %>
             </div>
             
-            <div>
-                <label for="body">본문</label>
-                <textarea id="body" name="body" rows="5"><%= post.body %></textarea>
+            <div class="form-input">
+                <label class="form-label" for="body">본문</label>
+                <textarea class="form-field" id="body" name="body" rows="5"><%= post.body %></textarea>
                 <% if(errors.body){ %>
-                    <span><%= errors.body.message %></span>
+                    <span class="form-error"><%= errors.body.message %></span>
                 <% } %>
             </div>
-    
-            <div id = "imageSection">
-                <label for="image">사진 추가 업로드</label>
-                <input type="file" id="file" name="image" multiple>
-                <div id = "imageContainer">
-                    <% if(post.attachment) { %>
-                        <% for(let i = 0; i < post.attachment.length; i++) { %>
-                            <img src = "/uploads/<%= post.attachment[i].serverFileName %>" alt = "사진이 없습니다." width="100px" height="100px" />
-                    <% } } %>
+
+            <% if(post.attachment) { %>
+                <div class="post-photo">
+                  <% for(let i = 0; i < post.attachment.length; i++) { %>
+                    <% if(post.attachment[i].isDeleted == false) {%>
+                        <label for="deleteImage">사진 삭제</label>
+                        <input type="checkbox" name="deleteImage[]" value="<%= post.attachment[i]._id %>">
+                        <img src="/uploads/<%= post.attachment[i].serverFileName %>" alt="사진이 없습니다." />
+                    <% } %>
+                  <% } %>
+                </div>
+            <% } %>
+            <div class="form-input" id="imageSection">
+                <label class="form-label" for="image">사진 업로드</label>
+                <div class="file-upload-container">
+                    <input class="file-upload-input" type="file" id="file" name="image" multiple>
+                    <div class="file-upload-button">파일 선택</div>
+                </div>
+                <div id="imageContainer" class="image-preview-container">
                 </div>
             </div>
 
-            <div>
-                <label for="location">위치</label>
-                <select name = "location" form = "post_write_form">
+            <div class="form-input">
+                <label class="form-label" for="location">위치</label>
+                <select class="form-field" name="location" form="post_write_form">
                     <option <% if(post.location === '북문') {%> selected <% } %>>북문</option>   
                     <option <% if(post.location === '정문') {%> selected <% } %>>정문</option>
                     <option <% if(post.location === '쪽문') {%> selected <% } %>>쪽문</option>
                     <option <% if(post.location === '서문') {%> selected <% } %>>서문</option>
                 </select>
             </div>
-    
-            <div>
-                <label>written by <%= post.author.userID %></label>
-                <input type="hidden" name="writtenBy" value = "<%= post.author.userID %>">
+
+            <div class="form-input">
+                <label class="form-label">작성자 <%= currentUser.userID %></label>
+                <input type="hidden" name="author" value="<%= currentUser.userID %>">
             </div>
+
+        </div>
+
+        <div class="form-actions">
+            <a class="form-link" href="/post/<%= post._id %><%= getPostQueryString() %>">뒤로 가기</a>
+            <button class="form-button" type="submit">제출</button>
+        </div>
+
+    </form>
     
-            <div>
-                <a href="/post/<%= post._id %><%= getPostQueryString() %>">뒤로 가기</a>
-                <button type="submit">제출</button>
-            </div>
-    
-        </form>
-    </div>
 </div>
 <script src = "js/fileupload.js"></script>

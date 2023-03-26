@@ -6,6 +6,7 @@ module.exports = function(app){
     var Post = require('../models/post');
     var File = require('../models/file');
     var util = require('../util');
+    const mongoose = require('mongoose');
     const path = require('path');
     const multer = require('multer');
     const stroage = multer.diskStorage({
@@ -37,8 +38,10 @@ module.exports = function(app){
             req.body.author = req.user._id;
 
             try {
+                console.log("post creation start on post");
                 const post = await Post.create(req.body);
-        
+                console.log("post creation success on post");
+
                 // iterate through files and create new file instance
                 for (var i = 0; i < req.files.length; i++) {
                     var file = req.files[i];
@@ -46,13 +49,15 @@ module.exports = function(app){
                     var newFileId = await newFilePromise;
                     post.attachment.push(newFileId);
                 }
-        
+                
+                console.log("post attachment success on post");
                 await post.save();
         
                 res.redirect('/post/' + post._id + res.locals.getPostQueryString());
             } catch(err) {
                 // if post creation fails, return to new post page with error message
                 console.log("post creation failed on post");
+                console.log(err);
                 req.flash('post', req.body);
                 req.flash('errors', util.parseError(err));
                 return res.redirect('/post/new' + res.locals.getPostQueryString());
@@ -110,11 +115,13 @@ module.exports = function(app){
         })
 
         .put(util.isLoggedin, checkPermission, upload.array('image'), async function(req, res){
+            console.log("recieved post edit put request");
             req.body.updatedAt = Date.now();
             
             // find post first
             const post = await Post.findOne({_id: req.params.id});
-            if(req.body.files){
+            if(req.files){
+                console.log("additional files found");
                 // iterate through files and create new file instance
                 for (var i = 0; i < req.files.length; i++) {
                     var file = req.files[i];
@@ -123,6 +130,17 @@ module.exports = function(app){
                     post.attachment.push(newFileId);
                 }
             }
+
+            // delete selected files
+            if(req.body.deleteImage){
+                for (let i = 0; i < req.body.deleteImage.length; i++) {
+                    console.log("orig: " + post.attachment[i]._id);
+                    console.log("checkbox: " + req.body.deleteImage[i]);
+                    const fileId = req.body.deleteImage[i];
+                    await File.updateOne({_id: fileId}, {isDeleted: true});
+                }
+            }
+
             // save post
             await post.save();
             

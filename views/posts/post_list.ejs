@@ -5,7 +5,7 @@
         <table class = "list">
             <thead>
                 <tr>
-                    <th class="n1" scope = "col">번호</th>
+                    <th class="n1" scope = "col">순서</th>
                     <th class="n3" scope = "col">제목</th>
                     <th class="n1" scope = "col">위치</th>
                     <th class="n2" scope = "col">작성자</th>
@@ -19,10 +19,10 @@
                 <tr>
                     <td colspan=2> There is no data to show :( </td>
                 </tr>
-                <% } else { %>
+                <% } else { var cnt = 1; %>
                 <% posts.forEach(function(post) { %>
                 <tr>
-                    <td><%= post.index %></td>
+                    <td><%= cnt++ %></td>
                     <td><a href="/post/<%= post._id %><%= getPostQueryString() %>"><%= post.title %></a></td>
                     <td><%= post.location %></td>
                     <td><%= post.author ? post.author.userID : "" %></td>
