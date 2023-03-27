@@ -24,20 +24,24 @@
             </div>
         </div>
         <div class="post-photo">
-            <% for(var i = 1; i < post.attachment.length; i++) { %>
-                <% if(post.attachment && post.attachment.length > 0 && post.attachment[0].isDeleted == false) { %>
-                    <div class="image-container <% i == 0 : 'current' ? '' %>">
-                        <img src="/uploads/<%= post.attachment[i].serverFileName %>" alt="사진이 없습니다." />
-                    </div>
-                <% } }%>
-            <% if(post.attachment.length > 1) { %>
+            <% if(post.attachment && post.attachment.length > 0) { %>
+              <div class="image-container current">
+                <img src="/uploads/<%= post.attachment[0].serverFileName %>" alt="사진이 없습니다." />
+              </div>
+              <% if(post.attachment.length > 1) { %>
                 <div class="image-navigation">
-                    <button class="prev-button">Prev</button>
-                    <button class="next-button">Next</button>
+                  <button class="prev-button">Prev</button>
+                  <button class="next-button">Next</button>
                 </div>
+              <% } %>
             <% } else { %>
-                <p>There are no photos for this post.</p>
+              <p>There are no photos for this post.</p>
             <% } %>
+        </div>
+          
+        <div class="post-photo-modal">
+            <span class="close">X</span>
+            <img class="modal-content" id="img-enlarged">
         </div>
       
         <div class="post-body">
@@ -55,23 +59,42 @@
 </div>
 
 <script>
+    const post = JSON.parse(unescape('<%= escape(JSON.stringify(post)) %>'));
     const prevButton = document.querySelector('.prev-button');
     const nextButton = document.querySelector('.next-button');
-    const currentImage = document.querySelector('.image-container.current');
-
+    const imageContainer = document.querySelector('.image-container.current');
+    const image = imageContainer.querySelector('img');
+    let currentIndex = 0;
+  
     prevButton.addEventListener('click', () => {
-        const prevImage = currentImage.previousElementSibling;
-        if (prevImage) {
-        currentImage.classList.remove('current');
-        prevImage.classList.add('current');
+        if (currentIndex === 0) {
+            currentIndex = post.attachment.length - 1;
+        } else {
+            currentIndex--;
         }
+        image.src = '/uploads/' + post.attachment[currentIndex].serverFileName;
+    });
+  
+    nextButton.addEventListener('click', () => {
+        if (currentIndex === post.attachment.length - 1) {
+            currentIndex = 0;
+        } else {
+            console.log(currentIndex++);
+        }
+        image.src = '/uploads/' + post.attachment[currentIndex].serverFileName;
     });
 
-    nextButton.addEventListener('click', () => {
-        const nextImage = currentImage.nextElementSibling;
-        if (nextImage) {
-        currentImage.classList.remove('current');
-        nextImage.classList.add('current');
-        }
+    const modal = document.querySelector('.post-photo-modal');
+    const modalImage = document.querySelector('.post-photo-modal img');
+    const modalClose = document.querySelector('.post-photo-modal .close');
+
+    image.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        modalImage.src = image.src;
+    });
+
+    modalClose.addEventListener('click', () => {
+        modal.style.display = 'none';
     });
 </script>
+  

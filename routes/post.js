@@ -165,10 +165,10 @@ module.exports = function(app){
             Post.findOne({_id:req.params.id})
                 .populate('author')
                 .populate('attachment')
-                .exec(function(err, post){
+                .exec(async function(err, post){
                     if(err) console.log(err);
                     post.views++;
-                    post.save();
+                    await post.save();
                     res.render('index', {
                         title: 'posts/post_info',
                         post: post
