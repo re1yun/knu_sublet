@@ -24,16 +24,17 @@
             </div>
         </div>
         <div class="post-photo">
-            <% if(post.attachment && post.attachment.length > 0 && post.attachment[0].isDeleted == false) { %>
-            <div class="image-container current">
-                <img src="/uploads/<%= post.attachment[0].serverFileName %>" alt="사진이 없습니다." />
-            </div>
+            <% for(var i = 1; i < post.attachment.length; i++) { %>
+                <% if(post.attachment && post.attachment.length > 0 && post.attachment[0].isDeleted == false) { %>
+                    <div class="image-container <% i == 0 : 'current' ? '' %>">
+                        <img src="/uploads/<%= post.attachment[i].serverFileName %>" alt="사진이 없습니다." />
+                    </div>
+                <% } }%>
             <% if(post.attachment.length > 1) { %>
                 <div class="image-navigation">
                     <button class="prev-button">Prev</button>
                     <button class="next-button">Next</button>
                 </div>
-            <% } %>
             <% } else { %>
                 <p>There are no photos for this post.</p>
             <% } %>
