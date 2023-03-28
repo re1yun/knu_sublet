@@ -53,7 +53,7 @@ db.once('open', function(){
     // CONNECTED TO MONGODB SERVER
     console.log("Connected to mongod server");
 });
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb+srv://admin:DAxLf5bgI9z0PN0y@cluster0.qzsapze.mongodb.net/?retryWrites=true&w=majority');
 
 //server starts
 var server = app.listen(3000, function(){

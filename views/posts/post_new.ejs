@@ -54,4 +54,11 @@
   </div>
   
   <script src="/js/fileupload.js"></script>
+  <script>
+    const fileUpload = document.querySelector('.file-upload-button');
+    const fileInput = document.querySelector('.file-upload-input');
+    fileUpload.addEventListener('click', () => {
+      fileInput.click();
+    });
+  </script>
   
