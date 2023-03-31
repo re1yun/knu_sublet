@@ -8,8 +8,9 @@ var methodOverride = require('method-override');
 var flash = require('connect-flash');
 var passport = require("./config/passport");
 var expressSession = require('express-session');
+var imagekit = require('imagekit');
 var util = require('./util');
-
+require('dotenv').config();
 
 //express setting
 //app.set("views", "./views");
@@ -53,7 +54,16 @@ db.once('open', function(){
     // CONNECTED TO MONGODB SERVER
     console.log("Connected to mongod server");
 });
-mongoose.connect('mongodb+srv://admin:<password>@cluster0.qzsapze.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// imagekit configuration
+var imagekit = new imagekit({
+  publicKey : process.env.IMAGEKIT_PUB,
+  privateKey : process.env.IMAGEKIT_PRIV,
+  urlEndpoint : process.env.IMAGEKIT_END
+});
+
+app.locals.imagekit = imagekit;
 
 //server starts
 var server = app.listen(3000, function(){

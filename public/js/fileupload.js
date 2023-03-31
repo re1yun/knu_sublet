@@ -16,11 +16,11 @@ file.addEventListener("change", (e) => {
         document.querySelector("#imageContainer").insertAdjacentHTML('beforeend', string);
     }
 
-    const formData = new FormData();
-    // formData: form data to be sent to the server
-    for(let i = 0; i < files.length; i++){
-        formData.append('image', files[i]);
-    }
+    // const formData = new FormData();
+    // // formData: form data to be sent to the server
+    // for(let i = 0; i < files.length; i++){
+    //     formData.append('image', files[i]);
+    // }
     
     // fetch("/post/upload", {
     //     method: "POST",
